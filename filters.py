@@ -30,6 +30,8 @@ def filter_mix1color(processing_image_data, params):
     - avg2ifgt
     - avg3ifgt
     - min2ifmin
+    - max2iflt
+    - min2ifgt
     - max2ifmax
     """
     c_ind = int(params[0]) - 1
@@ -57,6 +59,12 @@ def filter_mix1color(processing_image_data, params):
             elif params[1] == 'min2ifmin':
                 if c1 < c2 and c1 < c3:
                     c1 = min(c2, c3)
+            elif params[1] == 'max2iflt':
+                if c1 < c2 or c1 < c3:
+                    c1 = max(c2, c3)
+            elif params[1] == 'min2ifgt':
+                if c1 > c2 or c1 > c3:
+                    c1 = min(c2, c3)
             elif params[1] == 'max2ifmax':
                 if c1 > c2 and c1 > c3:
                     c1 = max(c2, c3)
@@ -69,15 +77,10 @@ def filter_mix1color(processing_image_data, params):
 
 
 def filter_mix2colors(processing_image_data, params):
-    """Channel mixer presets with 2 channels affected
+    """Channel mixer presets with 3 channels affected, but 2 of them in a same way
         Usage: run.py <image> mixcolor,<x>,<preset>
         where x is the channel id (1-3), and preset can be:
-        - avg2iflt
-        - avg3iflt
-        - avg2ifgt
-        - avg3ifgt
-        - min2ifmin
-        - max2ifmax
+        ...
         """
     c_ind = int(params[0]) - 1
     if c_ind < 0:
@@ -89,26 +92,28 @@ def filter_mix2colors(processing_image_data, params):
             c1 = pixel[c_ind]
             c2 = pixel[c_ind + 1 if c_ind < 2 else 0]
             c3 = pixel[c_ind + 2 if c_ind == 0 else c_ind - 1]
-            if params[1] == 'avg2iflt':
-                if c1 < c2 or c1 < c3:
-                    c1 = max((c2 + c3) / 2, c1)
-            elif params[1] == 'avg3iflt':
-                if c1 < c2 or c1 < c3:
-                    c1 = max((c2 + c3) / 2, c2, c3)
+            if params[1] == 'miniflt':
+                if c1 < c2:
+                    c2 = c1
+                if c1 < c3:
+                    c3 = c1
+            elif params[1] == 'avg2iflt':
+                if c1 < c2:
+                    c2 = (c2 + 2 * c1) / 3
+                if c1 < c3:
+                    c3 = (c3 + 2 * c1) / 3
             elif params[1] == 'avg2ifgt':
-                if c1 > c2 or c1 > c3:
-                    c1 = min((c2 + c3) / 2, c1)
-            elif params[1] == 'avg3ifgt':
-                if c1 > c2 or c1 > c3:
-                    c1 = min((c2 + c3) / 2, c2, c3)
-            elif params[1] == 'min2ifmin':
-                if c1 < c2 and c1 < c3:
-                    c1 = min(c2, c3)
-            elif params[1] == 'max2ifmax':
-                if c1 > c2 and c1 > c3:
-                    c1 = max(c2, c3)
+                if c1 > c2:
+                    c2 = (c2 + 2 * c1) / 3
+                if c1 > c3:
+                    c3 = (c3 + 2 * c1) / 3
+            elif params[1] == 'maxifgt':
+                if c1 > c2:
+                    c2 = c1
+                if c1 > c3:
+                    c3 = c1
             else:
-                raise Exception('Unknown mix1color preset "' + params[1] + '"')
+                raise Exception('Unknown mix2colors preset "' + params[1] + '"')
             pixel[c_ind] = c1
             pixel[c_ind + 1 if c_ind < 2 else 0] = c2
             pixel[c_ind + 2 if c_ind == 0 else c_ind - 1] = c3
