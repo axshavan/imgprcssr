@@ -80,7 +80,11 @@ def filter_mix2colors(processing_image_data, params):
     """Channel mixer presets with 3 channels affected, but 2 of them in a same way
         Usage: run.py <image> mixcolor,<x>,<preset>
         where x is the channel id (1-3), and preset can be:
-        ...
+        all2avg
+        miniflt
+        avg2iflt
+        avg2ifgt
+        maxifgt
         """
     c_ind = int(params[0]) - 1
     if c_ind < 0:
@@ -92,7 +96,11 @@ def filter_mix2colors(processing_image_data, params):
             c1 = pixel[c_ind]
             c2 = pixel[c_ind + 1 if c_ind < 2 else 0]
             c3 = pixel[c_ind + 2 if c_ind == 0 else c_ind - 1]
-            if params[1] == 'miniflt':
+            if params[1] == 'all2avg':
+                c = (c2 + c3) / 2
+                c2 = c
+                c3 = c
+            elif params[1] == 'miniflt':
                 if c1 < c2:
                     c2 = c1
                 if c1 < c3:

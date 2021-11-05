@@ -2,6 +2,7 @@
 import sys
 from PIL import Image
 import filters
+import converters
 
 if len(sys.argv) < 3:
     print("Usage: run.py <image> [<command[,param1[,...]]> [...]]")
@@ -34,6 +35,12 @@ for i in sys.argv:
                 processing_image_data = f[0](processing_image_data, f[1:] if len(f) > 1 else [])
             except Exception as e:
                 print("Cannot apply filter " + f[0] + ": " + str(e))
+        elif hasattr(converters, 'filter_' + f[0]):
+            f[0] = getattr(converters, 'filter_' + f[0])
+            try:
+                processing_image_data = f[0](processing_image_data, f[1:] if len(f) > 1 else [])
+            except Exception as e:
+                print("Cannot apply converter " + f[0] + ": " + str(e))
         else:
             print(f[0] + " is unknown filter")
     row += 1
@@ -42,9 +49,9 @@ for i in sys.argv:
 for x in range(image.width):
     for y in range(image.height):
         image.putpixel((x, y), (
-            int(processing_image_data[x][y][0]),
-            int(processing_image_data[x][y][1]),
-            int(processing_image_data[x][y][2])
+            max(min(int(processing_image_data[x][y][0]), 255), 0),
+            max(min(int(processing_image_data[x][y][1]), 255), 0),
+            max(min(int(processing_image_data[x][y][2]), 255), 0)
         ))
     row = 0
 image.save('out_' + sys.argv[1])
