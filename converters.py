@@ -1,6 +1,7 @@
 #!/bin//python
 import math
 
+
 def filter_convertcmy(processing_image_data, params):
     """Convert the image to another color space
     Usage: run.py <image> convertcmy,<direction>

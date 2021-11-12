@@ -25,6 +25,12 @@ def filter_mix1color(processing_image_data, params):
     """Channel mixer presets with 1 channel affected
     Usage: run.py <image> mixcolor,<x>,<preset>
     where x is the channel id (1-3), and preset can be:
+    - min2
+    - avg2
+    - max2
+    - min3
+    - avg3
+    - max3
     - avg2iflt
     - avg3iflt
     - avg2ifgt
@@ -44,7 +50,19 @@ def filter_mix1color(processing_image_data, params):
             c1 = pixel[c_ind]
             c2 = pixel[c_ind + 1 if c_ind < 2 else 0]
             c3 = pixel[c_ind + 2 if c_ind == 0 else c_ind - 1]
-            if params[1] == 'avg2iflt':
+            if params[1] == 'min2':
+                c1 = min(c2, c3)
+            elif params[1] == 'avg2':
+                c1 = (c2 + c3) / 2
+            elif params[1] == 'max2':
+                c1 = max(c2, c3)
+            elif params[1] == 'min3':
+                c1 = min(c1, c2, c3)
+            elif params[1] == 'avg3':
+                c1 = (c2 + c3 + c1) / 3
+            elif params[1] == 'max3':
+                c1 = max(c1, c2, c3)
+            elif params[1] == 'avg2iflt':
                 if c1 < c2 or c1 < c3:
                     c1 = max((c2 + c3) / 2, c1)
             elif params[1] == 'avg3iflt':
@@ -78,14 +96,14 @@ def filter_mix1color(processing_image_data, params):
 
 def filter_mix2colors(processing_image_data, params):
     """Channel mixer presets with 3 channels affected, but 2 of them in a same way
-        Usage: run.py <image> mixcolor,<x>,<preset>
-        where x is the channel id (1-3), and preset can be:
-        all2avg
-        miniflt
-        avg2iflt
-        avg2ifgt
-        maxifgt
-        """
+    Usage: run.py <image> mixcolor,<x>,<preset>
+    where x is the channel id (1-3), and preset can be:
+    - all2avg
+    - miniflt
+    - avg2iflt
+    - avg2ifgt
+    - maxifgt
+    """
     c_ind = int(params[0]) - 1
     if c_ind < 0:
         c_ind = 0
@@ -125,4 +143,37 @@ def filter_mix2colors(processing_image_data, params):
             pixel[c_ind] = c1
             pixel[c_ind + 1 if c_ind < 2 else 0] = c2
             pixel[c_ind + 2 if c_ind == 0 else c_ind - 1] = c3
+    return processing_image_data
+
+
+def filter_scurve(processing_image_data, params):
+    """
+    Make the color more contrast by applying to it the s-form curve
+    (make it lower in shadows, brighter in lights)
+    Usage: run.py <image> scurve,<x>[,<middle>[,<efficiency>]]
+    where x is the color index (1-3),
+    middle is the middle of the curve (0-255, 127 by default)
+    efficiency is the contrast miltiplier (1 by default)
+    max is the right end of the curve (0-255, 255 by default)
+    """
+    c_ind = int(params[0]) - 1
+    if c_ind < 0:
+        c_ind = 0
+    if c_ind > 2:
+        c_ind = 2
+    fmiddle = float(params[1]) if len(params) > 1 else 127
+    fefficiency = float(params[2]) if len(params) > 2 else 1
+    for row in processing_image_data:
+        for pixel in row:
+            c = pixel[c_ind]
+            if c > fmiddle:
+                fdistance = 255 - fmiddle
+                x = (c - fmiddle) / fdistance
+                x = -1 * x * x + x
+            else:
+                fdistance = fmiddle
+                x = c / fdistance
+                x = x * x - x
+            c = fefficiency * fdistance * x + c
+            pixel[c_ind] = c
     return processing_image_data
