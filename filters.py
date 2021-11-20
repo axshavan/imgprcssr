@@ -118,6 +118,14 @@ def filter_mix2colors(processing_image_data, params):
                 c = (c2 + c3) / 2
                 c2 = c
                 c3 = c
+            elif params[1] == 'grey2ifmax':
+                if c1 > c2 and c1 > c3:
+                    c = (c2 + c3) / 2
+                else:
+                    c = (c1 + c2 + c3) / 3
+                    c1 = c
+                c2 = c
+                c3 = c
             elif params[1] == 'miniflt':
                 if c1 < c2:
                     c2 = c1
