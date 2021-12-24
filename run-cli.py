@@ -1,5 +1,7 @@
 #!/bin/python
 import sys
+import time
+
 from PIL import Image
 import filters
 import converters
@@ -54,4 +56,4 @@ for x in range(image.width):
             max(min(int(processing_image_data[x][y][2]), 255), 0)
         ))
     row = 0
-image.save('out_' + sys.argv[1])
+image.save('out_' + str(time.time()) + sys.argv[1])

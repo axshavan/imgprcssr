@@ -20,6 +20,23 @@ def filter_zerocolor(processing_image_data, params):
             pixel[params] = 0
     return processing_image_data
 
+def filter_multiplycolor(processing_image_data, params):
+    """Another stupid dummy filter
+    Usage: run.py <image> multiplycolor,<x>,<muliplier>
+    where x is the channel id (1 = red, 2 = green, 3 = blue)
+    multiplier is a float number
+    """
+    params[1] = float(params[1])
+    params[0] = int(params[0]) - 1
+    if params[0] < 0:
+        params[0] = 0
+    if params[0] > 2:
+        params[0] = 2
+    for row in processing_image_data:
+        for pixel in row:
+            pixel[params[0]] *= params[1]
+    return processing_image_data
+
 
 def filter_mix1color(processing_image_data, params):
     """Channel mixer presets with 1 channel affected
