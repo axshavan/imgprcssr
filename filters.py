@@ -40,7 +40,7 @@ def filter_multiplycolor(processing_image_data, params):
 
 def filter_mix1color(processing_image_data, params):
     """Channel mixer presets with 1 channel affected
-    Usage: run.py <image> mixcolor,<x>,<preset>
+    Usage: run.py <image> mix1color,<x>,<preset>
     where x is the channel id (1-3), and preset can be:
     - min2
     - avg2
@@ -111,9 +111,9 @@ def filter_mix1color(processing_image_data, params):
     return processing_image_data
 
 
-def filter_mix2colors(processing_image_data, params):
-    """Channel mixer presets with 3 channels affected, but 2 of them in a same way
-    Usage: run.py <image> mixcolor,<x>,<preset>
+def filter_mix2colors_sym(processing_image_data, params):
+    """Channel mixer presets with 3 channels affected, but 2 of them in a same way (symmetrical)
+    Usage: run.py <image> mix2colors,<x>,<preset>
     where x is the channel id (1-3), and preset can be:
     - all2avg
     - miniflt
@@ -164,10 +164,81 @@ def filter_mix2colors(processing_image_data, params):
                 if c1 > c3:
                     c3 = c1
             else:
-                raise Exception('Unknown mix2colors preset "' + params[1] + '"')
+                raise Exception('Unknown mix2colors_sym preset "' + params[1] + '"')
             pixel[c_ind] = c1
             pixel[c_ind + 1 if c_ind < 2 else 0] = c2
             pixel[c_ind + 2 if c_ind == 0 else c_ind - 1] = c3
+    return processing_image_data
+
+
+def filter_mix2colors_asym(processing_image_data, params):
+    """Channel mixer presets with 3 channels affected asymmetrically
+    Usage: run.py <image> mix2colors,<x1>,<x2><preset>
+    where x1 and x2 are the channels ids (1-3), and preset can be:
+    - swap
+    - swampifmin
+    - swampiflt
+    - swapifgt
+    - swampifmax
+    - replace
+    - replaceifmin
+    - replaceiflt
+    - replaceifgt
+    - replaceifmax
+    """
+    c1_ind = int(params[0]) - 1
+    c2_ind = int(params[1]) - 1
+    if c1_ind < 0:
+        c1_ind = 0
+    if c1_ind > 2:
+        c1_ind = 2
+    if c2_ind < 0:
+        c2_ind = 0
+    if c2_ind > 2:
+        c2_ind = 2
+    c3_ind = c1_ind + 1 if c1_ind < 2 else 0
+    if c3_ind == c2_ind:
+        c3_ind += 1
+    if c3_ind > 2:
+        c3_ind -= 3
+    for row in processing_image_data:
+        for pixel in row:
+            c1 = pixel[c1_ind]
+            c2 = pixel[c2_ind]
+            c3 = pixel[c3_ind]
+            if params[2] == 'swap':
+                c1, c2 = c2, c1
+            elif params[2] == 'swapifmin':
+                if c1 < c2 and c1 < c3:
+                    c1, c2 = c2, c1
+            elif params[2] == 'swapiflt':
+                if c1 < c2:
+                    c1, c2 = c2, c1
+            elif params[2] == 'swapifgt':
+                if c1 > c2:
+                    c1, c2 = c2, c1
+            elif params[2] == 'swapifmax':
+                if c1 > c2 and c1 > c3:
+                    c1, c2 = c2, c1
+            elif params[2] == 'replace':
+                c1 = c2
+            elif params[2] == 'replaceifmin':
+                if c1 < c2 and c1 < c3:
+                    c1 = c2
+            elif params[2] == 'replaceiflt':
+                if c1 < c2:
+                    c1 = c2
+            elif params[2] == 'replaceifgt':
+                if c1 > c2:
+                    c1 = c2
+            elif params[2] == 'replaceifmax':
+                if c1 > c2 and c1 > c3:
+                    c1 = c2
+            else:
+                raise Exception('Unknown mix2colors_asym preset "' + params[2] + '"')
+            pixel[c1_ind] = c1
+            pixel[c2_ind] = c2
+            pixel[c3_ind] = c3
     return processing_image_data
 
 
