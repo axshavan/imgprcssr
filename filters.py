@@ -40,7 +40,7 @@ def filter_multiplycolor(processing_image_data, params):
 
 def filter_mix1color(processing_image_data, params):
     """Channel mixer presets with 1 channel affected
-    Usage: run.py <image> mixcolor,<x>,<preset>
+    Usage: run.py <image> mix1color,<x>,<preset>
     where x is the channel id (1-3), and preset can be:
     - min2
     - avg2
@@ -113,7 +113,7 @@ def filter_mix1color(processing_image_data, params):
 
 def filter_mix2colors(processing_image_data, params):
     """Channel mixer presets with 3 channels affected, but 2 of them in a same way
-    Usage: run.py <image> mixcolor,<x>,<preset>
+    Usage: run.py <image> mix2colors,<x>,<preset>
     where x is the channel id (1-3), and preset can be:
     - all2avg
     - miniflt

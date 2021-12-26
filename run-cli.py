@@ -56,4 +56,4 @@ for x in range(image.width):
             max(min(int(processing_image_data[x][y][2]), 255), 0)
         ))
     row = 0
-image.save('out_' + str(time.time()) + sys.argv[1])
+image.save('out/out_' + str(time.time()) + sys.argv[1])
