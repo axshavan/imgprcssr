@@ -7,6 +7,7 @@ def filter_dummy(processing_image_data, params):
 
 def filter_zerocolor(processing_image_data, params):
     """Another stupid dummy filter
+
     Usage: run.py <image> zerocolor,<x>
     where x is the channel id (1 = red, 2 = green, 3 = blue)
     """
@@ -22,6 +23,7 @@ def filter_zerocolor(processing_image_data, params):
 
 def filter_multiplycolor(processing_image_data, params):
     """Another stupid dummy filter
+
     Usage: run.py <image> multiplycolor,<x>,<muliplier>
     where x is the channel id (1 = red, 2 = green, 3 = blue)
     multiplier is a float number
@@ -40,6 +42,7 @@ def filter_multiplycolor(processing_image_data, params):
 
 def filter_mix1color(processing_image_data, params):
     """Channel mixer presets with 1 channel affected
+
     Usage: run.py <image> mix1color,<x>,<preset>
     where x is the channel id (1-3), and preset can be:
     - min2
@@ -113,6 +116,7 @@ def filter_mix1color(processing_image_data, params):
 
 def filter_mix2colors_sym(processing_image_data, params):
     """Channel mixer presets with 3 channels affected, but 2 of them in a same way (symmetrical)
+
     Usage: run.py <image> mix2colors,<x>,<preset>
     where x is the channel id (1-3), and preset can be:
     - all2avg
@@ -173,7 +177,8 @@ def filter_mix2colors_sym(processing_image_data, params):
 
 def filter_mix2colors_asym(processing_image_data, params):
     """Channel mixer presets with 3 channels affected asymmetrically
-    Usage: run.py <image> mix2colors,<x1>,<x2><preset>
+
+    Usage: run.py <image> mix2colors,<x1>,<x2>,<preset>
     where x1 and x2 are the channels ids (1-3), and preset can be:
     - swap
     - swampifmin
@@ -243,13 +248,12 @@ def filter_mix2colors_asym(processing_image_data, params):
 
 
 def filter_scurve(processing_image_data, params):
-    """
-    Make the color more contrast by applying to it the s-form curve
-    (make it lower in shadows, brighter in lights)
+    """Make the color more contrast by applying to it the s-form curve
+
     Usage: run.py <image> scurve,<x>[,<middle>[,<efficiency>]]
     where x is the color index (1-3),
     middle is the middle of the curve (0-255, 127 by default)
-    efficiency is the contrast miltiplier (1 by default)
+    efficiency is the contrast multiplier (1 by default)
     max is the right end of the curve (0-255, 255 by default)
     """
     c_ind = int(params[0]) - 1
