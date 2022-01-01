@@ -4,6 +4,7 @@ import math
 
 def filter_convertcmy(processing_image_data, params):
     """Convert the image to another color space
+
     Usage: run.py <image> convertcmy,<direction>
     where <direction> can be
     - 1 (converts rgb -> cmy)
@@ -32,6 +33,7 @@ def filter_convertcmy(processing_image_data, params):
 
 def filter_convertmatrix(processing_image_data, params):
     """Applies the matrix transformation to each pixel
+
     Pixel has three color values, these are coordinates of the color vector
     in the color space. Thus, it can be multiplied by a matrix to
     achieve some transformation
@@ -58,6 +60,7 @@ def filter_convertmatrix(processing_image_data, params):
 
 def filter_convertinvmatrix(processing_image_data, params):
     """Applies inverted matrix transformation to each pixel
+
     Pixel has three color values, these are coordinates of the color vector
     in the color space. Thus, it can be multiplied by a matrix to
     achieve some transformation
@@ -95,7 +98,8 @@ def filter_convertinvmatrix(processing_image_data, params):
 
 
 def filter_convertmatrix2(processing_image_data, params):
-    """Applies matrix transformation to each pixel; the third matrix column is calculated.
+    """Applies matrix transformation to each pixel; the third matrix column is calculated
+
     The 3x3 matrix describes the 3d space basis. The parameter of the function is 3x2 matrix,
     and the third its column (the third basis vector) is calculated to be perpendicular
     to the first two. Pixel has three color values, these are coordinates of the color vector

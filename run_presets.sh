@@ -1,10 +1,10 @@
-#python3 run-cli.py $1 mix2colors,1,all2avg
-#python3 run-cli.py $1 mix2colors,1,avg2ifgt
-#python3 run-cli.py $1 mix2colors,1,maxifgt
-#python3 run-cli.py $1 mix2colors,2,all2avg
-#python3 run-cli.py $1 mix2colors,2,miniflt
-#python3 run-cli.py $1 mix2colors,2,maxifgt
-#python3 run-cli.py $1 mix2colors,2,all2avg
+#python3 run-cli.py $1 mix2colors_sym,1,all2avg
+#python3 run-cli.py $1 mix2colors_sym,1,avg2ifgt
+#python3 run-cli.py $1 mix2colors_sym,1,maxifgt
+#python3 run-cli.py $1 mix2colors_sym,2,miniflt
+#python3 run-cli.py $1 mix2colors_sym,2,maxifgt
+#python3 run-cli.py $1 mix2colors_sym,2,all2avg
+
 
 python3 run-cli.py $1 convertmatrix2,0.299,0.649,1,0.932,0.61,0 multiplycolor,3,0.4 convertinvmatrix2,0.299,0.649,1,0.932,0.61,0
 python3 run-cli.py $1 convertmatrix2,0.299,0.649,1,0.932,0.61,0 scurve,3,75 convertinvmatrix2,0.299,0.649,1,0.932,0.61,0
